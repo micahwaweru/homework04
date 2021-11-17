@@ -1,4 +1,4 @@
-var time = 120;
+var time = 10;
 var timeRemaining = document.getElementById('timeRemaining');
 var strtBtn = document.getElementById('strtBtn');
 var instructions = document.getElementById('instructions');
@@ -57,11 +57,18 @@ var timer = function(){
   timeRemaining.innerText = time;
   time--;
   
-  console.log(time);
 }
 
 var runTimer = function(){
-  setInterval(timer, 1000);
+  setInterval(function(){
+    timeRemaining.innerText = time;
+    time--;
+    if(time===0){
+      clearInterval(runTimer);
+    }
+  }, 1000);
+
+
 }
 
 var addScore = function(){
@@ -132,6 +139,9 @@ var startQuiz = function(){
 
 strtBtn.addEventListener('click', startQuiz)
 
+// var endQuiz = function(){
+//   clearInterval(runTimer);
+// }
 
 //my questions
 // const quizContainer =document.querySelector('#quiz');
