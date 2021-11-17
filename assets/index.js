@@ -1,132 +1,139 @@
-//my functions
-function buildQuiz(){
-    const output = [];
-  
-    myQuestions.forEach(
-      (currentQuestion, questionNumber) => {
+var time = 120;
+var timeRemaining = document.getElementById('timeRemaining');
+var strtBtn = document.getElementById('strtBtn');
+var instructions = document.getElementById('instructions');
+var headTxt = document.getElementById('headTxt');
+var quizContainer = document.getElementById('quiz');
+var questionTxt = document.getElementById('questionTxt');
+var answerBtn1 = document.getElementById('answerBtn1');
+var answerBtn2 = document.getElementById('answerBtn2');
+var answerBtn3 = document.getElementById('answerBtn3');
+var nxtBtn = document.getElementById('nxtBtn');
+var index = -1;
+var testScore = 10
+var score = document.getElementById('score').innerText 
+var correct = 'Correct!'
+var incorrect = "Incorrect!"
+var result = document.getElementById('result').innerText
+var endBtn = document.getElementById('endBtn')
 
-        const answers = [];
-
-        for(letter in currentQuestion.answers){
-          answers.push(
-            `<label>
-              <input type="radio" name="question${questionNumber}" value="${letter}">
-              ${letter} :
-              ${currentQuestion.answers[letter]}
-            </label>`
-          );
-        }
-        output.push(
-            `<div class="slide">
-              <div class="question"> ${currentQuestion.question} </div>
-              <div class="answers"> ${answers.join("")} </div>
-            </div>`
-          );
-      }
-    );
-    quizContainer.innerHTML = output.join('');
-  }
-
-  function showResults(){
-    const answerContainers = quizContainer.querySelectorAll('.answers');
-    let numCorrect = 0;
-  
-    myQuestions.forEach( (currentQuestion, questionNumber) => {
-      const answerContainer = answerContainers[questionNumber];
-      const selector = `input[name=question${questionNumber}]:checked`;
-      const userAnswer = (answerContainer.querySelector(selector) || {}).value;
-  
-      if(userAnswer === currentQuestion.correctAnswer){
-        numCorrect++;
-        console.log(numCorrect);
-        localStorage.setItem('Number Correct', numCorrect);
-  
-        answerContainers[questionNumber].style.color = 'lightgreen';
-      }
-
-      else{
-        answerContainers[questionNumber].style.color = 'red';
-      }
-    });
-
-    resultsContainer.innerHTML = `${numCorrect} out of ${myQuestions.length}`;
-  }
-
-  function showSlide(n) {
-    slides[currentSlide].classList.remove('active-slide');
-    slides[n].classList.add('active-slide');
-    currentSlide = n;
-    if(currentSlide === 0){
-      previousButton.style.display = 'none';
-    }
-    else{
-      previousButton.style.display = 'inline-block';
-    }
-    if(currentSlide === slides.length-1){
-      nextButton.style.display = 'none';
-      submitButton.style.display = 'inline-block';
-    }
-    else{
-      nextButton.style.display = 'inline-block';
-      submitButton.style.display = 'none';
-    }
-  }
+var setScore = function(){
+  document.getElementById('score').innerText = testScore;
+}
+setScore();
 
 
-//my variables
-const quizContainer =document.querySelector('#quiz');
-const resultsContainer =document.querySelector('#results');
-const submitButton=document.querySelector('#submit');
 const myQuestions = [
-    {
-      question: "Who invented JavaScript?",
-      answers: {
-        a: "Douglas Crockford",
-        b: "Sheryl Sandberg",
-        c: "Brendan Eich"
-      },
-      correctAnswer: "c"
+  {
+    question: "Who invented JavaScript?",
+    answers: {
+      a: "Douglas Crockford",
+      b: "Sheryl Sandberg",
+      c: "Brendan Eich"
     },
-    {
-      question: "Which one of these is a JavaScript package manager?",
-      answers: {
-        a: "Node.js",
-        b: "TypeScript",
-        c: "npm"
-      },
-      correctAnswer: "c"
+    correctAnswer: "Brendan Eich"
+  },
+  {
+    question: "Which one of these is a JavaScript package manager?",
+    answers: {
+      a: "Node.js",
+      b: "TypeScript",
+      c: "npm"
     },
-    {
-      question: "Which tool can you use to ensure code quality?",
-      answers: {
-        a: "Angular",
-        b: "jQuery",
-        c: "RequireJS",
-        d: "ESLint"
-      },
-      correctAnswer: "d"
-    }
-  ];
+    correctAnswer: "npm"
+  },
+  {
+    question: "Which tool can you use to ensure code quality?",
+    answers: {
+      a: "Angular",
+      b: "jQuery",
+      c: "ESLint"
+    },
+    correctAnswer: "ESLint"
+  }
+];
+
+var timer = function(){
+  timeRemaining.innerText = time;
+  time--;
+  
+  console.log(time);
+}
+
+var runTimer = function(){
+  setInterval(timer, 1000);
+}
+
+var addScore = function(){
+  testScore +=5;
+  console.log(testScore)
+  score = testScore;
+  setScore();
+  document.getElementById('result').innerText = correct;
+};
+
+var subScore = function(){
+  testScore -=5
+  console.log(testScore)
+  score = testScore;
+  setScore();
+  document.getElementById('result').innerText = incorrect;
+}
+
+var test = function(e){
+  console.log(e.target.innerText)
+  var userAnswer = e.target.innerText
+  if(userAnswer===myQuestions[index].correctAnswer){
+    addScore();
+  }
+  else{
+    subScore();
+  }
+
+}
+
+var setQuestionEls = function(){
+  index++
+  console.log('INDEX!'+ index)
+
+questionTxt.innerText = myQuestions[index].question
+answerBtn1.innerText = myQuestions[index].answers.a
+answerBtn2.innerText = myQuestions[index].answers.b
+answerBtn3.innerText = myQuestions[index].answers.c
+
+answerBtn1.addEventListener('click', test);
+answerBtn2.addEventListener('click', test);
+answerBtn3.addEventListener('click', test);
+
+if(index>myQuestions.length-1){
+quizContainer.classList.add('hide');
+}
+
+}
 
 
+
+
+
+var startQuiz = function(){
+  runTimer();
+  instructions.classList.add('hide');
+  headTxt.innerHTML = "Quiz Started!"
+  quizContainer.classList.remove('hide');
+  let i = 0;
+  console.log(i)
+  setQuestionEls();
+  nxtBtn.addEventListener('click', function(){
+    setQuestionEls();
+  })
   
 
-//display quiz 
-buildQuiz();
+}
 
-//pagination
-const previousButton = document.getElementById('previous');
-const nextButton = document.getElementById('next')
-const slides = document.querySelector('.slide');
-let currentSlide = 0;
+strtBtn.addEventListener('click', startQuiz)
 
 
-
-  showSlide(0);
-
-//on submit, show results
-submitButton.addEventListener('click', showResults);
-
-
-
-
+//my questions
+// const quizContainer =document.querySelector('#quiz');
+// const resultsContainer =document.querySelector('#results');
+// const submitButton=document.querySelector('#submit');

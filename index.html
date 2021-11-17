@@ -4,17 +4,40 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Homework 4: Code Quiz</title>
+    <link rel="stylesheet" href="./assets/index.css"/>
 </head>
 <body>
-    <div class="quiz-container">
-        <div id="quiz"></div>
+
+<header>
+    <div class="displayScores">
+        <p>Score:<p id="score"></p> </p>
+        <p>Answer is:<p id="result"></p></p>
     </div>
-    <button id="previous">Previous Question</button>
-    <button id="next">Next Question</button>
-        <button id="submit">Submit Quiz</button>
-        <div id="results"></div>
-    
+    <div class="timeDiv" id="timeDiv">Time Remaining: <div id="timeRemaining"></div></div>
+    <h1 id="headTxt">Test your coding knowledge!</h1>
+</header>
+
+<div id="instructions" class="instructions">
+    <h2>Instructions</h2>
+    <p>This is a timed, multiple choice quiz. You have 2 minutes to complete this quiz! Good luck!</p>
+    <div id="btnCont">
+        <button id="strtBtn" class="strtBtn">Let's Go!</button>
+    </div>
+</div>
+
+<div id="quiz" class="hide">
+    <h3 id='questionTxt' >Question Here</h3>
+        <button id="answerBtn1" class="answerBtn">Option 1</button>
+        <button id="answerBtn2" class="answerBtn">Option 2</button>
+        <button id="answerBtn3" class="answerBtn">Option 3</button>
+    <br>
+        <button id="nxtBtn">Next Answer</button>
+        
+
+</div>
+<button id="endBtn" class="hide">Done!</button>
+
     
     
     
