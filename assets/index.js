@@ -1,4 +1,4 @@
-var time = 10;
+var time = 120;
 var timeRemaining = document.getElementById('timeRemaining');
 var strtBtn = document.getElementById('strtBtn');
 var instructions = document.getElementById('instructions');
@@ -18,7 +18,12 @@ var result = document.getElementById('result').innerText
 var endBtn = document.getElementById('endBtn')
 
 var setScore = function(){
+  if(localStorage.getItem('score')){
+    document.getElementById('score').innerText = localStorage.getItem('score')
+  }
+  else{
   document.getElementById('score').innerText = testScore;
+  }
 }
 setScore();
 
@@ -59,17 +64,10 @@ var timer = function(){
   
 }
 
-var runTimer = function(){
-  setInterval(function(){
-    timeRemaining.innerText = time;
-    time--;
-    if(time===0){
-      clearInterval(runTimer);
-    }
-  }, 1000);
 
 
-}
+
+
 
 var addScore = function(){
   testScore +=5;
@@ -77,6 +75,7 @@ var addScore = function(){
   score = testScore;
   setScore();
   document.getElementById('result').innerText = correct;
+  localStorage.setItem('score', score);
 };
 
 var subScore = function(){
@@ -85,6 +84,7 @@ var subScore = function(){
   score = testScore;
   setScore();
   document.getElementById('result').innerText = incorrect;
+  localStorage.setItem('score', score);
 }
 
 var test = function(e){
@@ -99,9 +99,21 @@ var test = function(e){
 
 }
 
-var setQuestionEls = function(){
+var increment = function(){
   index++
   console.log('INDEX!'+ index)
+  if(index<myQuestions.length){
+    setQuestionEls();
+  }
+  else{
+  endQuiz();
+
+  }
+}
+
+var setQuestionEls = function(){
+  //index++
+  
 
 questionTxt.innerText = myQuestions[index].question
 answerBtn1.innerText = myQuestions[index].answers.a
@@ -112,9 +124,9 @@ answerBtn1.addEventListener('click', test);
 answerBtn2.addEventListener('click', test);
 answerBtn3.addEventListener('click', test);
 
-if(index>myQuestions.length-1){
-quizContainer.classList.add('hide');
-}
+// if(index>myQuestions.length-1){
+// quizContainer.classList.add('hide');
+// }
 
 }
 
@@ -123,15 +135,23 @@ quizContainer.classList.add('hide');
 
 
 var startQuiz = function(){
-  runTimer();
+  var runTimer = setInterval(function(){
+    timeRemaining.innerText = time;
+    time--;
+    if(time<0){
+      console.log('END TIMER!')
+      clearInterval(runTimer);
+      endQuiz();
+    }
+  }, 1000);
   instructions.classList.add('hide');
   headTxt.innerHTML = "Quiz Started!"
   quizContainer.classList.remove('hide');
-  let i = 0;
-  console.log(i)
-  setQuestionEls();
+  // const i;
+  //console.log(i)
+  increment();
   nxtBtn.addEventListener('click', function(){
-    setQuestionEls();
+    increment();
   })
   
 
@@ -139,9 +159,12 @@ var startQuiz = function(){
 
 strtBtn.addEventListener('click', startQuiz)
 
-// var endQuiz = function(){
-//   clearInterval(runTimer);
-// }
+var endQuiz = function(){
+  //clearInterval(runTimer);
+  window.location.reload();
+  quizContainer.classList.add('hide');
+  
+}
 
 //my questions
 // const quizContainer =document.querySelector('#quiz');
